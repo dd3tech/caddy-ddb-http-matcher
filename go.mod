@@ -1,11 +1,11 @@
-module github.com/dd3tech/caddy-ddb-http-matcher.git
+module github.com/dd3tech/caddy-ddb-http-matcher
 
 go 1.22.1
 
 require (
-	github.com/aws/aws-sdk-go-v2/config v1.27.9
-	github.com/aws/aws-sdk-go-v2/credentials v1.17.9
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.31.0
+	github.com/aws/aws-sdk-go-v2/config v1.27.10
+	github.com/aws/aws-sdk-go-v2/credentials v1.17.10
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.31.1
 	github.com/caddyserver/caddy/v2 v2.7.6
 )
 
@@ -18,18 +18,18 @@ require (
 	github.com/Microsoft/go-winio v0.6.0 // indirect
 	github.com/antlr/antlr4/runtime/Go/antlr/v4 v4.0.0-20230305170008-8188dc5388df // indirect
 	github.com/aryann/difflib v0.0.0-20210328193216-ff5ff6dc229b // indirect
-	github.com/aws/aws-sdk-go-v2 v1.26.0 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.0 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.4 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.4 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.26.1 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.1 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.5 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.5 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.11.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.9.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.11.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.20.3 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.23.3 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.28.5 // indirect
-	github.com/aws/smithy-go v1.20.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.11.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.9.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.11.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.20.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.23.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.28.6 // indirect
+	github.com/aws/smithy-go v1.20.2 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/caddyserver/certmagic v0.20.0 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
