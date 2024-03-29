@@ -2,6 +2,7 @@ package dynamodb_matcher
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -40,7 +41,6 @@ func (m *DynamoDBMatcher) Provision(ctx caddy.Context) error {
 	return nil
 }
 
-// Match returns true if the key-value pair exists in the specified DynamoDB table.
 func (m DynamoDBMatcher) Match(r *http.Request) bool {
 
 	valueCheck := strings.Split(r.Host, ".")[m.UrlIndex]
@@ -55,21 +55,18 @@ func (m DynamoDBMatcher) Match(r *http.Request) bool {
 	result, err := m.dynamoDBSvc.GetItem(context.TODO(), input)
 	if err != nil {
 		// Log error or handle accordingly
-		fmt.Println(err)
+		fmt.Println("Got error calling GetItem: ", err.Error())
 		return false
 	}
 
 	if result.Item != nil {
-		fmt.Println("Website Migrated: ", valueCheck)
 		return true
 	}
 
-	// Item does not exist, it's not a match
 	return false
 
 }
 
-// CaddyModule returns the Caddy module information.
 func (DynamoDBMatcher) CaddyModule() caddy.ModuleInfo {
 	return caddy.ModuleInfo{
 		ID:  "http.matchers.ddb_matcher",
@@ -77,7 +74,6 @@ func (DynamoDBMatcher) CaddyModule() caddy.ModuleInfo {
 	}
 }
 
-// UnmarshalCaddyfile sets up the matcher from Caddyfile tokens. Syntax: dynamodb <table_name> <key_name> <key_value>
 func (dm *DynamoDBMatcher) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	d.Next()
 
@@ -99,7 +95,7 @@ func (dm *DynamoDBMatcher) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 			d.NextArg()
 			UrlIndex, err := strconv.Atoi(d.Val())
 			if err != nil {
-				return nil
+				return d.Err("Invalid value for url_index: " + err.Error())
 			}
 			dm.UrlIndex = UrlIndex
 		case "region":
@@ -111,17 +107,15 @@ func (dm *DynamoDBMatcher) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 	return nil
 }
 
-// Interface guards
 var (
 	_ caddy.Validator          = (*DynamoDBMatcher)(nil)
 	_ caddyhttp.RequestMatcher = (*DynamoDBMatcher)(nil)
 )
 
-// Validate ensures that the matcher is properly configured.
 func (dm *DynamoDBMatcher) Validate() error {
-	// if dm.TableName == "" || dm.KeyName == "" {
-	// 	return errors.New("DynamoDB parameters cannot be empty")
-	// }
+	if dm.TableName == "" || dm.KeyName == "" || dm.AccessKey == "" || dm.SecretKey == "" || dm.Region == "" {
+		return errors.New("DynamoDB parameters missed. Please check the configuration file")
+	}
 	return nil
 }
 
