@@ -23,7 +23,7 @@ import (
 type DynamoDBMatcher struct {
 	TableName   string `json:"table_name"`
 	KeyName     string `json:"key_name"`
-	Regex       string `json:"url_index"`
+	Regex       string `json:"regex"`
 	AccessKey   string `json:"access_key"`
 	SecretKey   string `json:"secret_key"`
 	Region      string `json:"region"`
@@ -62,6 +62,7 @@ func (m DynamoDBMatcher) Match(r *http.Request) bool {
 	}
 
 	log.Println("Value to check - DynamoDB Matcher: ", valueCheck)
+	fmt.Println("Value to check - DynamoDB Matcher: ", valueCheck)
 
 	input := &dynamodb.GetItemInput{
 		TableName: &m.TableName,
