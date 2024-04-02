@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
-	"strconv"
+	"regexp"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -22,7 +23,7 @@ import (
 type DynamoDBMatcher struct {
 	TableName   string `json:"table_name"`
 	KeyName     string `json:"key_name"`
-	UrlIndex    int    `json:"url_index"`
+	Regex       string `json:"url_index"`
 	AccessKey   string `json:"access_key"`
 	SecretKey   string `json:"secret_key"`
 	Region      string `json:"region"`
@@ -43,7 +44,24 @@ func (m *DynamoDBMatcher) Provision(ctx caddy.Context) error {
 
 func (m DynamoDBMatcher) Match(r *http.Request) bool {
 
-	valueCheck := strings.Split(r.Host, ".")[m.UrlIndex]
+	var valueCheck string
+
+	rgx, err := regexp.Compile(m.Regex)
+	patternWww := regexp.MustCompile(`(?:www)`)
+
+	if err != nil {
+		fmt.Println("Error compiling regex: ", err.Error())
+		return false
+	}
+
+	if patternWww.MatchString(r.Host) {
+		// get rid off www
+		valueCheck = strings.Split(rgx.FindString(r.Host), ".")[1]
+	} else {
+		valueCheck = rgx.FindString(r.Host)
+	}
+
+	log.Println("Value to check - DynamoDB Matcher: ", valueCheck)
 
 	input := &dynamodb.GetItemInput{
 		TableName: &m.TableName,
@@ -91,13 +109,9 @@ func (dm *DynamoDBMatcher) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 		case "secret_key":
 			d.NextArg()
 			dm.SecretKey = d.Val()
-		case "url_index":
+		case "regex":
 			d.NextArg()
-			UrlIndex, err := strconv.Atoi(d.Val())
-			if err != nil {
-				return d.Err("Invalid value for url_index: " + err.Error())
-			}
-			dm.UrlIndex = UrlIndex
+			dm.Regex = d.Val()
 		case "region":
 			d.NextArg()
 			dm.Region = d.Val()
