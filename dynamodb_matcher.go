@@ -48,7 +48,7 @@ func (m DynamoDBMatcher) Match(r *http.Request) bool {
 
 	var valueCheck string
 
-	rgx, err := regexp.MustCompile(m.Regex)
+	rgx, err := regexp.Compile(m.Regex)
 	patternWww := regexp.MustCompile(`(?:www)`)
 
 	if err != nil {
