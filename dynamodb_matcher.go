@@ -44,9 +44,11 @@ func (m *DynamoDBMatcher) Provision(ctx caddy.Context) error {
 
 func (m DynamoDBMatcher) Match(r *http.Request) bool {
 
+	log.Println("DynamoDB Matcher init: ", r.Host)
+
 	var valueCheck string
 
-	rgx, err := regexp.Compile(m.Regex)
+	rgx, err := regexp.MustCompile(m.Regex)
 	patternWww := regexp.MustCompile(`(?:www)`)
 
 	if err != nil {
@@ -62,7 +64,6 @@ func (m DynamoDBMatcher) Match(r *http.Request) bool {
 	}
 
 	log.Println("Value to check - DynamoDB Matcher: ", valueCheck)
-	fmt.Println("Value to check - DynamoDB Matcher: ", valueCheck)
 
 	input := &dynamodb.GetItemInput{
 		TableName: &m.TableName,
